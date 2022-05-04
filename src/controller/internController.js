@@ -8,6 +8,7 @@ const createIntern = async function (req, res) {
         let requestBody = req.body;
         let collegeID = await collegeModel.findOne({ name: requestBody.collegeName });
         requestBody['collegeId'] = collegeID;
+        console.log(requestBody)
         let Data = await internModel.create(requestBody);
         res.status(201).send({ status: true, msg: "Created", Data: Data });
     }

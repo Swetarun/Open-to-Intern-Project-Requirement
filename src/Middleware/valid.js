@@ -20,8 +20,8 @@ const validCollege = async function (req, res, next) {
             return res.status(400).send({ status: false, message: "Name can't be a number" });
         }
 
-        let checkname = await collegeModel.find({ name: requestBody.name });
-        if (!checkname) {
+        let checkname = await collegeModel.findOne({ name: requestBody.name });
+        if (checkname) {
             return res.status(400).send({ status: false, msg: "Name Already In Use, Change The Name !!!" });
         }
         next();
@@ -61,7 +61,6 @@ const validIntern = async function (req, res, next) {
             return res.status(409).send({ status: false, msg: "This Email has been registered already" })
         }
 
-        // let val = mobile.value
         if (Object.values(requestBody.mobile).length < 10 || (requestBody.mobile).length > 10) {
             return res.status(400).send({ status: false, msg: "Mobile Number should be 10 Digits" })
         }
