@@ -91,3 +91,18 @@ const validIntern = async function (req, res, next) {
     }
 }
 module.exports.validIntern = validIntern;
+
+
+const validCollegeDetails = async function (req, res, next) {
+    try {
+        let collegeName = req.query.collegeName;
+        if (!collegeName) {
+            res.status(400).send({ status: false, msg: "Plz Enter CollegeName In Query !!!" });
+        }
+        next();
+    }
+    catch (err) {
+        res.status(500).send({ status: false, msg: err.message });
+    }
+}
+module.exports.validCollegeDetails = validCollegeDetails;

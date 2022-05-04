@@ -7,5 +7,6 @@ const middle = require('../Middleware/valid')
 
 router.post('/functionup/colleges', middle.validCollege, collegeController.createCollege);
 router.post('/functionup/interns', middle.validIntern, internController.createIntern);
+router.get('/functionup/collegeDetails', middle.validCollegeDetails, collegeController.collegeDetails);
 
 module.exports = router;
