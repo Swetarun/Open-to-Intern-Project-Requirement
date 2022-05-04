@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb+srv://Swetarun:lBf6gTedHw2tfPtQ@cluster0.ebg8a.mongodb.net/group56Database").then(() => console.log("MongoDB Is Connected")).catch(err => console.log(err));
+mongoose.connect("mongodb+srv://Swetarun:lBf6gTedHw2tfPtQ@cluster0.ebg8a.mongodb.net/group52Database").then(() => console.log("MongoDB Is Connected")).catch(err => console.log(err));
 
 app.use('/', route);
 
