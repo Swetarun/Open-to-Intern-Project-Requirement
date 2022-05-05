@@ -9,20 +9,21 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.name) {
             return res.status(400).send({ status: false, msg: "Plz Enter Name In Body !!!" });
         }
+
         if (!requestBody.fullName) {
             return res.status(400).send({ status: false, msg: "Plz Enter FullName In Body !!!" });
         }
         if (!requestBody.logoLink) {
             return res.status(400).send({ status: false, msg: "Plz Enter LogoLink In Body !!!" });
         }
-       
-        if(!validator.isURL(requestBody.logoLink)){
+
+        if (!validator.isURL(requestBody.logoLink)) {
             return res.status(400).send({ status: false, msg: "Plz Enter a valid url!!!" });
         }
-        if((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null){
+        if ((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null) {
             return res.status(400).send({ status: false, msg: "Plz Enter a valid LogoLink!!!" });
         }
-        let nameValidation = /^[a-zA-Z ]+$/ 
+        let nameValidation = /^[a-zA-Z ]+$/
         if (!nameValidation.test(requestBody.name)) {
             return res.status(400).send({ status: false, message: "Name can't be a number" });
         }
@@ -62,6 +63,7 @@ const validIntern = async function (req, res, next) {
         if (!emailValidator.validate(email)) {
             return res.status(400).send({ status: false, msg: "Check the format of email" })
         }
+
         let emailValidation = await internModel.findOne({ email: email })
         if (emailValidation) {
             return res.status(409).send({ status: false, msg: "This Email has been registered already" })
@@ -70,12 +72,14 @@ const validIntern = async function (req, res, next) {
         if (Object.values(requestBody.mobile).length < 10 || (requestBody.mobile).length > 10) {
             return res.status(400).send({ status: false, msg: "Mobile Number should be 10 Digits" })
         }
+
         let mobileValidation = await internModel.findOne({ mobile: mobile })
         if (mobileValidation) {
             return res.status(409).send({ status: false, msg: "This Mobile has been registered already" })
         }
 
-        let collegeID = await collegeModel.findOne({ name: requestBody.collegeName });
+        let cName = req.body.collegeName.toLowerCase();
+        let collegeID = await collegeModel.findOne({ name: cName });
         if (!collegeID) {
             return res.status(400).send({ status: false, msg: "This is not a valid College" });
         }
@@ -88,7 +92,6 @@ const validIntern = async function (req, res, next) {
         if (!mob.test(mobile)) {
             return res.status(400).send({ status: false, message: "Mobile number should have digits only" });
         }
-
         next();
     }
     catch (err) {
