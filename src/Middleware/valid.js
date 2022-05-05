@@ -103,4 +103,5 @@ const validCollegeDetails = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports={validIntern, validCollegeDetails, validCollege}
+
+module.exports = { validCollegeDetails, validIntern, validCollege };
