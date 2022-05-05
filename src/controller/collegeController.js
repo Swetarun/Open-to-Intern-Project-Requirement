@@ -16,7 +16,7 @@ const createCollege = async function (req, res) {
 
 const collegeDetails = async function (req, res) {
     try {
-        let collegeName = req.query.collegeName;
+        let collegeName = req.query.collegeName.toLowerCase();
         let collegedata = await collegeModel.findOne({ name: collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 });
         if (!collegedata) {
             res.status(400).send({ status: false, msg: "Plz Enter a valid CollegeName!!!" });

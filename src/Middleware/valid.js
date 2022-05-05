@@ -9,6 +9,15 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.name) {
             return res.status(400).send({ status: false, msg: "Plz Enter Name In Body !!!" });
         }
+        let nameValidation = /^[a-zA-Z ]+$/
+        if (!nameValidation.test(requestBody.name)) {
+            return res.status(400).send({ status: false, message: "Name can't be a number" });
+        }
+        
+        let checkname = await collegeModel.findOne({ name: requestBody.name });
+        if (checkname) {
+            return res.status(400).send({ status: false, msg: "Name Already In Use, Change The Name !!!" });
+        }
 
         if (!requestBody.fullName) {
             return res.status(400).send({ status: false, msg: "Plz Enter FullName In Body !!!" });
@@ -22,15 +31,6 @@ const validCollege = async function (req, res, next) {
         }
         if ((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null) {
             return res.status(400).send({ status: false, msg: "Plz Enter a valid LogoLink!!!" });
-        }
-        let nameValidation = /^[a-zA-Z ]+$/
-        if (!nameValidation.test(requestBody.name)) {
-            return res.status(400).send({ status: false, message: "Name can't be a number" });
-        }
-
-        let checkname = await collegeModel.findOne({ name: requestBody.name });
-        if (checkname) {
-            return res.status(400).send({ status: false, msg: "Name Already In Use, Change The Name !!!" });
         }
         next();
     }
@@ -51,24 +51,23 @@ const validIntern = async function (req, res, next) {
         if (!name) {
             return res.status(400).send({ status: false, message: "Name is required" });
         }
+        let nameValidation = /^[A-z ]+$/
+        if (!nameValidation.test(name)) {
+            return res.status(400).send({ status: false, message: "Name can't be a number" });
+        }
         if (!email) {
             return res.status(400).send({ status: false, message: "Email is required" });
-        }
-        if (!mobile) {
-            return res.status(400).send({ status: false, message: "Mobile Number is required" });
-        }
-        if (!collegeName) {
-            return res.status(400).send({ status: false, message: "College Name is required" });
         }
         if (!emailValidator.validate(email)) {
             return res.status(400).send({ status: false, msg: "Check the format of email" })
         }
-
         let emailValidation = await internModel.findOne({ email: email })
         if (emailValidation) {
             return res.status(409).send({ status: false, msg: "This Email has been registered already" })
         }
-
+        if (!mobile) {
+            return res.status(400).send({ status: false, message: "Mobile Number is required" });
+        }
         if (Object.values(requestBody.mobile).length < 10 || (requestBody.mobile).length > 10) {
             return res.status(400).send({ status: false, msg: "Mobile Number should be 10 Digits" })
         }
@@ -77,21 +76,19 @@ const validIntern = async function (req, res, next) {
         if (mobileValidation) {
             return res.status(409).send({ status: false, msg: "This Mobile has been registered already" })
         }
-
-        let cName = req.body.collegeName.toLowerCase();
-        let collegeID = await collegeModel.findOne({ name: cName });
-        if (!collegeID) {
-            return res.status(400).send({ status: false, msg: "This is not a valid College" });
-        }
-
-        let nameValidation = /^[A-z ]+$/
-        if (!nameValidation.test(name)) {
-            return res.status(400).send({ status: false, message: "Name can't be a number" });
-        }
         let mob = /^[0-9 ]+$/
         if (!mob.test(mobile)) {
             return res.status(400).send({ status: false, message: "Mobile number should have digits only" });
         }
+        if (!collegeName) {
+            return res.status(400).send({ status: false, message: "College Name is required" });
+        }
+        let cName = collegeName.toLowerCase();
+        let collegeID = await collegeModel.findOne({ name: cName });
+        if (!collegeID) {
+            return res.status(400).send({ status: false, msg: "This is not a valid College" });
+        }
+        
         next();
     }
     catch (err) {

@@ -5,11 +5,12 @@ const createIntern = async function (req, res) {
     try {
         req.body.name = req.body.name.replace(/\s+/g, ' ').trim();
 
-        let requestBody = req.body;
-        let collegeID = await collegeModel.findOne({ name: requestBody.collegeName });
-        requestBody['collegeId'] = collegeID;
+        let cName= req.body.collegeName
+        let collegeID = await collegeModel.findOne({ name: cName.toLowerCase() });
+        req.body['collegeName'] = cName.toLowerCase();
+        req.body['collegeId'] = collegeID;
 
-        let Data = await internModel.create(requestBody);
+        let Data = await internModel.create(req.body);
         res.status(201).send({ status: true, msg: "Created", Data: Data });
     }
     catch (err) {
