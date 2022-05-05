@@ -30,7 +30,6 @@ const validCollege = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validCollege = validCollege;
 
 const validIntern = async function (req, res, next) {
     try {
@@ -89,8 +88,6 @@ const validIntern = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validIntern = validIntern;
-
 
 const validCollegeDetails = async function (req, res, next) {
     try {
@@ -104,4 +101,6 @@ const validCollegeDetails = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validCollegeDetails = validCollegeDetails;
+
+
+module.exports = { validCollegeDetails, validIntern, validCollege };
