@@ -14,7 +14,10 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.logoLink) {
             return res.status(400).send({ status: false, msg: "Plz Enter LogoLink In Body !!!" });
         }
+        if((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null){
+            return res.status(400).send({ status: false, msg: "Plz Enter a valid LogoLink!!!" });
 
+        }
         let nameValidation = /^[A-z]+$/
         if (!nameValidation.test(requestBody.name)) {
             return res.status(400).send({ status: false, message: "Name can't be a number" });
@@ -30,7 +33,6 @@ const validCollege = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validCollege = validCollege;
 
 const validIntern = async function (req, res, next) {
     try {
@@ -89,9 +91,6 @@ const validIntern = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validIntern = validIntern;
-
-
 const validCollegeDetails = async function (req, res, next) {
     try {
         let collegeName = req.query.collegeName;
@@ -104,4 +103,4 @@ const validCollegeDetails = async function (req, res, next) {
         res.status(500).send({ status: false, msg: err.message });
     }
 }
-module.exports.validCollegeDetails = validCollegeDetails;
+module.exports={validIntern, validCollegeDetails, validCollege}
