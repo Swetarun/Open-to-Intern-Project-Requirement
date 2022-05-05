@@ -1,6 +1,7 @@
 const emailValidator = require('email-validator');
 const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel');
+const validator = require('validator');
 
 const validCollege = async function (req, res, next) {
     try {
@@ -14,11 +15,14 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.logoLink) {
             return res.status(400).send({ status: false, msg: "Plz Enter LogoLink In Body !!!" });
         }
+       
+        if(!validator.isURL(requestBody.logoLink)){
+            return res.status(400).send({ status: false, msg: "Plz Enter a valid url!!!" });
+        }
         if((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null){
             return res.status(400).send({ status: false, msg: "Plz Enter a valid LogoLink!!!" });
-
         }
-        let nameValidation = /^[A-z]+$/
+        let nameValidation = /^[a-zA-Z ]+$/ 
         if (!nameValidation.test(requestBody.name)) {
             return res.status(400).send({ status: false, message: "Name can't be a number" });
         }
