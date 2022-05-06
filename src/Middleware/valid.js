@@ -1,7 +1,6 @@
 const emailValidator = require('email-validator');
 const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel');
-const validator = require('validator');
 
 const validCollege = async function (req, res, next) {
     try {
@@ -9,12 +8,12 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.name) {
             return res.status(400).send({ status: false, msg: "Plz Enter Name In Body !!!" });
         }
-        let nameValidation = /^[a-zA-Z ]+$/
+        let nameValidation = /^[a-zA-Z]+$/
         if (!nameValidation.test(requestBody.name)) {
-            return res.status(400).send({ status: false, message: "Name can't be a number" });
+            return res.status(400).send({ status: false, message: "Name can only be alphabetically" });
         }
         
-        let checkname = await collegeModel.findOne({ name: requestBody.name });
+        let checkname = await collegeModel.findOne({ name: requestBody.name.toLowerCase() });
         if (checkname) {
             return res.status(400).send({ status: false, msg: "Name Already In Use, Change The Name !!!" });
         }
@@ -25,10 +24,14 @@ const validCollege = async function (req, res, next) {
         if (!requestBody.logoLink) {
             return res.status(400).send({ status: false, msg: "Plz Enter LogoLink In Body !!!" });
         }
-
-        if (!validator.isURL(requestBody.logoLink)) {
-            return res.status(400).send({ status: false, msg: "Plz Enter a valid url!!!" });
+        
+        let reg =  /^(http(s)?:\/\/)?(www.)?([a-zA-Z0-9])+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/[^\s]*)?$/gm
+        let regex= reg.test(requestBody.logoLink)
+        console.log(regex)
+        if(regex === false){
+            return res.status(400).send({ status: false, msg: "Please Enter a valid URL for the logoLink."})
         }
+        
         if ((requestBody.logoLink).match(/\.(jpeg|jpg|gif|png)$/) == null) {
             return res.status(400).send({ status: false, msg: "Plz Enter a valid LogoLink!!!" });
         }
@@ -61,6 +64,7 @@ const validIntern = async function (req, res, next) {
         if (!emailValidator.validate(email)) {
             return res.status(400).send({ status: false, msg: "Check the format of email" })
         }
+       
         let emailValidation = await internModel.findOne({ email: email })
         if (emailValidation) {
             return res.status(409).send({ status: false, msg: "This Email has been registered already" })

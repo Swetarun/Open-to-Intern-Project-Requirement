@@ -3,7 +3,8 @@ const interModel = require('../models/internModel');
 
 const createCollege = async function (req, res) {
     try {
-        req.body.name = req.body.name.toLowerCase().replace(/\s+/g, ' ').trim()
+        req.body.name = req.body.name.toLowerCase().trim()
+        console.log(req.body.name)
         req.body.fullName = req.body.fullName.replace(/\s+/g, ' ').trim();
 
         let saveData = await collegeModel.create(req.body);
